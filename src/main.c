@@ -14,6 +14,34 @@
 #define S_NFO "\033[0;36m"      // Cyan
 
 
+#ifdef _WIN32
+#include <wchar.h>
+#include <windows.h>
+#endif
+
+// Non-zero for failure. Assumes enabled for non-Windows
+int virtualTerminalEnabled()
+{
+#ifdef _WIN32
+    // Set output mode to handle virtual terminal sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE)
+        return GetLastError();
+
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode))
+        return GetLastError();
+
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    if (!SetConsoleMode(hOut, dwMode))
+        return GetLastError();
+
+    return 0;
+#else
+    return 0;
+#endif
+}
+
 
 void removeTrailingLinebreak(char* str)
 {
@@ -75,6 +103,12 @@ void printHelp()
 
 int main(int argc, char** argv)
 {
+    if (virtualTerminalEnabled())
+    {
+        printf("Could not enable virtual terminal\n");
+        return 1;
+    }
+
     struct LinkedList list = { NULL };
     handleArgs(argc, argv, &list);
 
