@@ -127,7 +127,7 @@ int main(int argc, char** argv)
             continue;
         }
 
-        if (!sscanf(lineBuffer, "%255s %n", command, &read))
+        if (sscanf(lineBuffer, "%255s %n", command, &read) < 1)
             continue;
         
         if (strcmp(command, "stop") == 0 || strcmp(command, "exit") == 0 || strcmp(command, "q") == 0)
@@ -174,7 +174,7 @@ int main(int argc, char** argv)
                 continue;
             }
 
-            if (!sscanf(lineBuffer + offset, " %d%n", &index, &read))
+            if (sscanf(lineBuffer + offset, " %d%n", &index, &read) < 1)
             {
                 fprintf(stderr, S_ERR "Invalid index argument for get command\n" S_RST);
                 continue;
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
                 continue;
             }
 
-            if (!sscanf(lineBuffer + offset, " %d %n", &index, &read))
+            if (sscanf(lineBuffer + offset, " %d %n", &index, &read) < 1)
             {
                 fprintf(stderr, S_ERR "Invalid index argument for set command\n" S_RST);
                 continue;
@@ -212,7 +212,7 @@ int main(int argc, char** argv)
             }
 
             // Check if value exists, but read rest of line buffer instead (preserves spaces)
-            if (!sscanf(lineBuffer + offset, " %255s", value))
+            if (sscanf(lineBuffer + offset, " %255s", value) < 1)
             {
                 fprintf(stderr, S_ERR "Invalid value argument for set command\n" S_RST);
                 continue;
@@ -233,7 +233,7 @@ int main(int argc, char** argv)
 
         if (strcmp(command, "add") == 0)
         {
-            if (endOfLine || !sscanf(lineBuffer + offset, "%255s %n", command, &read))
+            if (endOfLine || sscanf(lineBuffer + offset, "%255s %n", command, &read) < 1)
             {
                 fprintf(stderr, S_ERR "Missing arguments for add command\n" S_RST);
                 continue;
@@ -250,7 +250,7 @@ int main(int argc, char** argv)
                     continue;
                 }
 
-                if (!sscanf(lineBuffer + offset, " %d %n", &index, &read))
+                if (sscanf(lineBuffer + offset, " %d %n", &index, &read) < 1)
                 {
                     fprintf(stderr, S_ERR "Invalid index argument for add at command\n" S_RST);
                     continue;
@@ -260,7 +260,7 @@ int main(int argc, char** argv)
                 endOfLine = (offset + 1) >= strlen(lineBuffer);
 
                 // Check if value exists, but read rest of line buffer instead (preserves spaces)
-                if (!sscanf(lineBuffer + offset, " %255s", value))
+                if (sscanf(lineBuffer + offset, " %255s", value) < 1)
                 {
                     fprintf(stderr, S_ERR "Invalid value argument for add at command\n" S_RST);
                     continue;
@@ -280,7 +280,7 @@ int main(int argc, char** argv)
                 endOfLine = (offset + 1) >= strlen(lineBuffer);
 
                 // Check if value exists, but read rest of line buffer instead (preserves spaces)
-                if (!sscanf(lineBuffer + offset, " %255s", value))
+                if (sscanf(lineBuffer + offset, " %255s", value) < 1)
                 {
                     fprintf(stderr, S_ERR "Invalid value argument for add at command\n" S_RST);
                     continue;
@@ -300,7 +300,7 @@ int main(int argc, char** argv)
 
         if (strcmp(command, "remove") == 0)
         {
-            if (endOfLine || !sscanf(lineBuffer + offset, "%255s %n", command, &read))
+            if (endOfLine || sscanf(lineBuffer + offset, "%255s %n", command, &read) < 1)
             {
                 fprintf(stderr, S_ERR "Missing arguments for remove command\n" S_RST);
                 continue;
@@ -313,7 +313,7 @@ int main(int argc, char** argv)
             }
             
 
-            if (!sscanf(lineBuffer + offset, " %d", &index))
+            if (sscanf(lineBuffer + offset, " %d", &index) < 1)
             {
                 fprintf(stderr, S_ERR "Invalid index argument for remove command\n" S_RST);
                 continue;
