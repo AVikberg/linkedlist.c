@@ -28,5 +28,4 @@ jobs:
       
     - name: Build app
       run: |
-        make clean
         make linked
